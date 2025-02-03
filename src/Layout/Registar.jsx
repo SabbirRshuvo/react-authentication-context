@@ -1,12 +1,26 @@
-import { Link } from "react-router";
+import { useContext } from "react";
+import { Link, useNavigate } from "react-router";
+import { AuthContext } from "../providers/AuthProviders";
 
 const Registar = () => {
+  const { createuser } = useContext(AuthContext);
+
+  const navigate = useNavigate();
   const handleRegistar = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(name, email, password);
+    createuser(email, password)
+      .then((result) => {
+        console.log(result.user);
+        e.target.reset();
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.log("Error", error.message);
+      });
   };
   return (
     <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl mx-auto my-4">
